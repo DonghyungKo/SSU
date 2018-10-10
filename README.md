@@ -19,7 +19,7 @@
 ---
   - [Team presentation](https://github.com/DonghyungKo/SSU/)
     - Naver-cafe & clien(online community) crawling and text analysis
-    - [Word_Cloud](./OM/team_presentation/Data/word_cloud/클리엔_아이포니앙_10264.png')
-    - [Embedding](./OM/team_presentation/Data/word_cloud/아이포니앙_임베딩.png')
+    - [Word_Cloud](OM/team_presentation/Data/word_cloud/클리엔_아이포니앙_10264.png')
+    - [Embedding](OM/team_presentation/Data/word_cloud/아이포니앙_임베딩.png')
 
     
