@@ -19,7 +19,7 @@
 ---
   - [Team presentation](https://github.com/DonghyungKo/SSU/)
     - Naver-cafe & clien(online community) crawling and text analysis
-    - **word_cloud**
+    - **Word_Cloud**
     <img width = 400 src = 'https://github.com/DonghyungKo/SSU/blob/master/OM/team_presentation/Data/word_cloud/%ED%81%B4%EB%A6%AC%EC%97%94_%EC%95%84%EC%9D%B4%ED%8F%AC%EB%8B%88%EC%95%99_10264.PNG?raw=true'>
     
     - **Embedding**
