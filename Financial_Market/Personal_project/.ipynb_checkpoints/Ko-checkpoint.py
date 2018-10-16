@@ -5,11 +5,12 @@ import seaborn as sns
 sns.set()
 
 
-'''
-지표 값이 담겨있는 데이터프레임이 대한 전처리를 수행하는 함수
-'''
 
 def Preprocessing(raw, column):
+    
+    '''
+    지표 값이 담겨있는 데이터프레임이 대한 전처리를 수행하는 함수
+    '''
     
     CD_list = list(raw.iloc[0,1:])
     name_list = list(raw.iloc[1,1:])
@@ -110,9 +111,6 @@ def portfolio_selection(df):
                     
     
     return data.iloc[:,:-1] # 마지막 달 제거
-
-
-
 
 
 def performance_analysis(data, rt_df):
