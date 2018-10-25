@@ -1,6 +1,8 @@
 # SSU in-class projects
 ---
 
+<br>
+
 # 2018-2 semester
 
 ## [Financial_Markets](https://github.com/DonghyungKo/SSU/Financial_Market)
@@ -19,7 +21,11 @@
 ---
   - [Team presentation](https://github.com/DonghyungKo/SSU/)
     - Naver-cafe & clien(online community) crawling and text analysis
-    - [Word_Cloud](./OM/team_presentation/Data/word_cloud/클리엔_아이포니앙_10264.png')
-    - [Embedding](./OM/team_presentation/Data/word_cloud/아이포니앙_임베딩.png')
+    - **Word_Cloud**
+    <img width = 400 src = 'https://github.com/DonghyungKo/SSU/blob/master/OM/team_presentation/Data/word_cloud/%ED%81%B4%EB%A6%AC%EC%97%94_%EC%95%84%EC%9D%B4%ED%8F%AC%EB%8B%88%EC%95%99_10264.PNG?raw=true'>
+    
+    - **Embedding**
+    <img width = 600 src = 'https://github.com/DonghyungKo/SSU/blob/master/OM/team_presentation/Data/word_cloud/%EC%95%84%EC%9D%B4%ED%8F%AC%EB%8B%88%EC%95%99_%EC%9E%84%EB%B2%A0%EB%94%A9.png?raw=true'>
+    
 
     
