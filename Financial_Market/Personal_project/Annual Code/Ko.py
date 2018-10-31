@@ -6,7 +6,7 @@ sns.set()
 
 
 
-def Preprocessing(raw, column):
+def Preprocessing(raw, column, drop_limit):
     
     '''
     지표 값이 담겨있는 데이터프레임이 대한 전처리를 수행하는 함수
@@ -31,11 +31,19 @@ def Preprocessing(raw, column):
     
     # 첫줄은 Symbol이니까 제외
     df = df.apply(lambda x: __remove_comma(x)).T
+
+    # 2년 이상의 자료가 존재
+    use_index_ls = []
     
-    df = df.loc[df.sum(axis = 1) != 0]
+    for index in df.index:
+        row = df.loc[[index]]
+        
+        if len(row[row != 0].dropna(thresh = drop_limit)):
+            use_index_ls.append(index)
+            
+    df = df.loc[use_index_ls]
     
     return df
-
 
 
 # 퍼센트로 표시된 수익률을 곱셈이 편한 형태로 변환해주는 함수
@@ -84,12 +92,14 @@ def portfolio_selection(df):
             # t월에 존재하지 않았던 펀드들은 t+1월에 x그룹으로 따로 분류한다 (t월 : x, t+1월 : 0)
             t_no_existence_list = [x for x in name_list if not x in t_index_list]
             
+            # t월에 존재하지 않았던 종목은 t+1월에 0으로 처리한다
+            data.loc[t_no_existence_list, month_list[cnt+1]] = 'x'
+            
+            
             # t월에 존재하였지만 t+1월에 사라진 종목들은 t+1월에 0그룹으로 분류한다 (t월 : 존재, t+1월: 사라짐)
             t_1_disappear_list = [x for x in t_index_list if not x in t_plus_1_index_list]
             
 
-            # t월에 존재하지 않았던 종목은 t+1월에 0으로 처리한다
-            data.loc[t_no_existence_list, month_list[cnt+1]] = 'x'
             
             # t월에 존재했지만 t+1월에 사라진 종목들은 역시 0로 따로 처리한다.
             ## 처리하면 안된다. 왜냐하면, 다음 달에 성과지표가 -로 가서 사라진건지, 상장 폐지된건지 알 수 없기 때문.. 일단 x로 처리하진 말자
