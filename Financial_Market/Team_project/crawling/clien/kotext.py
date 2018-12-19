@@ -2,11 +2,6 @@ import io
 import re
 import pandas as pd
  
-from pdfminer.converter import TextConverter
-from pdfminer.pdfinterp import PDFPageInterpreter
-from pdfminer.pdfinterp import PDFResourceManager
-from pdfminer.pdfpage import PDFPage
- 
 from konlpy.tag import *
 import konlpy
 from gensim.models import word2vec
@@ -25,9 +20,15 @@ sns.set()
 from matplotlib import font_manager, rc
 from PIL import Image
 
-font_location = 'C:/Windows/Fonts/malgun.ttf' # For Windows
-font_name = font_manager.FontProperties(fname=font_location).get_name()
-rc('font', family=font_name)
+# 그래프에서 마이너스 폰트 꺠지는 문제에 대한 대처
+mpl.rcParams['axes.unicode_minus'] = False
+
+# 한글 문제 해결
+try:
+    path = '/usr/share/fonts/truetype/nanum/NanumGothic.ttf'
+    fontprop = font_manager.FontProperties(fname=path, size=18).get_name()
+    rc('font', family='NanumGothicCoding')
+except: pass
 
 
 # 그래프에서 마이너스 폰트 꺠지는 문제에 대한 대처
@@ -131,12 +132,12 @@ def preprocessing_for_embedding(text_ls):
 
 
 
-def embedding(sentences, num_features = 300, min_word_count = 50, num_workers = 4, context = 10,):
+def embedding(sentences, size = 300, min_word_count = 3, num_workers = 4, window = 10,):
     
     model_name = "%sfeatures_%sminwords_%scontext"%(num_features, min_word_count, context)
     
     try:   
-        model = gensim.models.Doc2Vec.load(model_name)
+        model = gensim.models.Word2vec.load(model_name)
     
     except:
         # 파라미터 값 지정
@@ -146,14 +147,14 @@ def embedding(sentences, num_features = 300, min_word_count = 50, num_workers = 
         num_workers =4 # 병렬 처리 스레드 수
         context = 10 # 문자열의 창 크기
         '''
-        downsampling = 1e-3 # 문자 빈도 수 Downsample
+        downsampling = 1e-5 # 문자 빈도 수 Downsample
 
 
         model = word2vec.Word2Vec(sentences,
                                   workers = num_workers,
-                                  size = num_features,
+                                  size = size,
                                   min_count = min_word_count,
-                                  window = context,
+                                  window = window,
                                   sample = downsampling,
                                   iter = 30
                                  )

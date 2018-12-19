@@ -51,11 +51,21 @@ def rt_transform(column):
     column = column.apply(lambda x: x/100 +1)
     
     import math
+    flag = 0
     
+    # 수익률이 사라지면 상장 폐지로 간주하고, -100%로 만든다.
     for i, x in enumerate(column):
-        if math.isnan(x):
-            column[i] = 0
-            break
+        # 처음 수익률이 존재(상장)되면 flag on
+        if not flag:
+            if not math.isnan(x):
+                flag = 1
+                continue
+        
+        # 상장된 후에는 수익률이 사라지면 상장 폐지(-100%)로 고려
+        elif flag:
+            if math.isnan(x):
+                column[i] = 0
+                break
     
     return column
 
@@ -67,16 +77,12 @@ def portfolio_selection(df):
     
     # 높을수록 1그룹
     # 낮을수록 10 그룹
-    
     data = df.copy()
-    
-    month_list = df.columns
-    name_list = df.index
+    month_list, name_list = df.columns, df.index
 
     # t월의 지표 횡단면을 분석하여, t+1월의 1일에 투자하는 것을 목표로 한다.
     # 따라서 t월 마지막 일을 기준으로 포트폴리오를 그룹핑하고, t+1월 1일 부터 투자한다.
     # t+1월에 새로 상장된 주식, 혹은 t월에 지표 값이 음수인 경우, t+1월에는 투자되지 않는다 (x로 처리)
-    
     for cnt, month in enumerate(month_list):        
         temp_t = df[month].dropna()
         
@@ -100,8 +106,8 @@ def portfolio_selection(df):
             
             # t월에 존재하였지만 t+1월에 사라진 종목들은 t+1월에 일단 그대로 둔다 (t월 : 존재, t+1월: 사라짐)
             # 왜냐하면, 다음 달에 성과지표가 -로 가서 사라진건지, 상장 폐지된건지 알 수 없기 때문.. 일단 x로 처리하진 말자
-            t_1_disappear_list = [x for x in t_index_list if not x in t_plus_1_index_list]
-            #data.loc[t_1_disappear_list, month_list[cnt+1]] = 'x'
+            # t_1_disappear_list = [x for x in t_index_list if not x in t_plus_1_index_list]
+            # data.loc[t_1_disappear_list, month_list[cnt+1]] = 'x'
 
             # 그룹핑을 위한 10분위값 계산
             Q_value_list = [0]
@@ -114,7 +120,6 @@ def portfolio_selection(df):
                     
                     data.loc[df_temp_index, month_list[cnt+1]] = i
                     
-    
     return data.iloc[:,:-1] # 마지막 달 제거
 
 
@@ -142,9 +147,9 @@ def performance_analysis(data, rt_df):
                 rt_t_plus_1 = rt_df[month_list[cnt+1]].dropna()
 
                 # t-1월에 수익률이 존재하였지만 t월에 사라진 종목들은 상장폐지된 종목으로 결정하고 -100% 수익률로 측정한다.
-                #Abolished_index = [x for x in rt_t.index if not x in rt_t_plus_1.index]
+                Abolished_index = [x for x in rt_t.index if not x in rt_t_plus_1.index]
                 #print(month, Abolished_index)
-                #rt_df.loc[Abolished_index, month] = 0
+                rt_df.loc[Abolished_index, month] = 0
                        
             for i in range(10): # i는 1,2,3,4 ~ 10
                 group_index = temp[temp == i].index
